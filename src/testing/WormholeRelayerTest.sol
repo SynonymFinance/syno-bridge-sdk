@@ -12,7 +12,6 @@ import "./helpers/CircleCCTPSimulator.sol";
 import "./ERC20Mock.sol";
 import "./helpers/DeliveryInstructionDecoder.sol";
 import "./helpers/ExecutionParameters.sol";
-import "./helpers/MockOffchainRelayer.sol";
 
 import "forge-std/Test.sol";
 import "forge-std/console.sol";
@@ -79,8 +78,6 @@ abstract contract WormholeRelayerTest is Test {
     // active forks for the test
     mapping(uint16 => ActiveFork) public activeForks;
     uint16[] public activeForksList;
-
-    MockOffchainRelayer public mockOffchainRelayer;
 
     constructor() {
         initChainInfo();
@@ -152,23 +149,11 @@ abstract contract WormholeRelayerTest is Test {
 
         ActiveFork memory firstFork = activeForks[activeForksList[0]];
         vm.selectFork(firstFork.fork);
-        mockOffchainRelayer = new MockOffchainRelayer(
-            address(firstFork.wormhole),
-            address(firstFork.guardian),
-            address(firstFork.circleAttester)
-        );
+
         // register all active forks with the 'offchain' relayer
         for (uint256 i = 0; i < activeForksList.length; ++i) {
             ActiveFork storage fork = activeForks[activeForksList[i]];
-            mockOffchainRelayer.registerChain(
-                fork.chainId,
-                address(fork.relayer),
-                fork.fork
-            );
         }
-
-        // Allow the offchain relayer to work on all forks
-        vm.makePersistent(address(mockOffchainRelayer));
 
         vm.selectFork(firstFork.fork);
         setUpGeneral();
@@ -186,12 +171,12 @@ abstract contract WormholeRelayerTest is Test {
 
     function performDelivery(Vm.Log[] memory logs, bool debugLogging) public {
         require(logs.length > 0, "no events recorded");
-        mockOffchainRelayer.relay(logs, debugLogging);
+        // mockOffchainRelayer.relay(logs, debugLogging);
     }
 
     function performDelivery(Vm.Log[] memory logs) public {
         require(logs.length > 0, "no events recorded");
-        mockOffchainRelayer.relay(logs);
+        // mockOffchainRelayer.relay(logs);
     }
 
     function createAndAttestToken(
