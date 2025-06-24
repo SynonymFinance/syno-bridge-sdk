@@ -11,7 +11,7 @@
   },
   "author": "Syno Finance",
   "license": "ISC",
-  "devDependencies": {
+  "dependencies": {
     "@openzeppelin/contracts": "^5.0.0",
     "@openzeppelin/contracts-upgradeable": "^5.0.0"
   }
