@@ -2,7 +2,7 @@
 pragma solidity ^0.8.0;
 
 import {IERC20} from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
-import {IWormholeRelayer} from "@wormhole/interfaces/IWormholeRelayer.sol";
+import {IWormholeRelayer} from "./IWormholeRelayer.sol";
 
 interface IWormholeTunnel {
     error InsufficientMsgValue();
